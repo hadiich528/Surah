@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surah Names</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+    .toast-show {
+      animation: fadeInOut 1.5s forwards;
+    }
+    @keyframes fadeInOut {
+      0% {opacity: 0; transform: translateY(20px);}
+      10% {opacity: 1; transform: translateY(0);}
+      90% {opacity: 1; transform: translateY(0);}
+      100% {opacity: 0; transform: translateY(20px);}
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-purple-100 via-indigo-50 to-white min-h-screen flex flex-col items-center p-6 font-sans">
+
+  <!-- Header -->
+  <header class="w-full max-w-5xl mb-8 text-center">
+    <h1 class="text-5xl font-extrabold text-purple-700 mb-3 animate-pulse">📖 Surah Names</h1>
+    <p class="text-purple-600 mb-6">Click to copy the Surah name to clipboard</p>
+    <!-- Search -->
+    <input id="searchInput" 
+           type="text" 
+           placeholder="Search Surah..." 
+           class="w-full px-5 py-3 rounded-full shadow-lg border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 text-lg bg-white/70 glass">
+  </header>
+
+  <!-- Surah Grid -->
+  <div id="surahContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full max-w-6xl">
+    <!-- Surah cards injected here -->
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-purple-600 text-white px-6 py-3 rounded-full shadow-xl opacity-0 pointer-events-none">
+    Copied to clipboard!
+  </div>
+
+  <script>
+    const surahs = {
+      "alfatiha": 1, "albaqarah": 2, "aliimran": 3, "annisa": 4, "almaida": 5,
+      "alanam": 6, "alaraf": 7, "alanfal": 8, "attawba": 9, "yunus": 10,
+      "hud": 11, "yusuf": 12, "arraad": 13, "ibraheem": 14, "alhijr": 15,
+      "annahl": 16, "al_isra": 17, "alkahf": 18, "maryam": 19, "taha": 20,
+      "alanbiya": 21, "alhajj": 22, "almuminun": 23, "annur": 24, "alfurqan": 25,
+      "ashshuara": 26, "annaml": 27, "alqasas": 28, "alankabut": 29, "arroom": 30,
+      "luqman": 31, "assajda": 32, "alahzab": 33, "saba": 34, "fatir": 35,
+      "yaseen": 36, "assaffat": 37, "sad": 38, "azzumar": 39, "ghafir": 40,
+      "fussilat": 41, "ashshura": 42, "azzukhruf": 43, "addukhan": 44, "aljathiya": 45,
+      "alahqaf": 46, "muhammad": 47, "alfath": 48, "alhujurat": 49, "qaf": 50,
+      "adhdhariyat": 51, "attur": 52, "annajm": 53, "alqamar": 54, "arrahman": 55,
+      "alwaqi'a": 56, "alhadid": 57, "almujadila": 58, "alhashr": 59, "almumtahina": 60,
+      "assaff": 61, "aljumu'a": 62, "almunafiqun": 63, "attaghabun": 64, "attalaq": 65,
+      "attahrim": 66, "almulk": 67, "alqalam": 68, "alhaqqa": 69, "almaarij": 70,
+      "nuh": 71, "aljinn": 72, "almuzzammil": 73, "almuddathir": 74, "alqiyama": 75,
+      "alinsan": 76, "almursalat": 77, "annaba": 78, "annaziat": 79, "abasa": 80,
+      "attakwir": 81, "alinfitar": 82, "almutaffifin": 83, "alinshiqaq": 84, "alburuj": 85,
+      "attariq": 86, "alaala": 87, "alghashiya": 88, "alfajr": 89, "albalad": 90,
+      "ashshams": 91, "allail": 92, "adduha": 93, "ashsharh": 94, "attin": 95,
+      "alalaq": 96, "alqadr": 97, "albayyina": 98, "azzalzalah": 99, "aladiyat": 100,
+      "alqaria": 101, "attakathur": 102, "alasr": 103, "alhumaza": 104, "alfill": 105,
+      "quraish": 106, "almaun": 107, "alkawthar": 108, "alkafirun": 109, "annasr": 110,
+      "almasad": 111, "alikhlas": 112, "alfalaq": 113, "annas": 114
+    };
+
+    const container = document.getElementById("surahContainer");
+    const toast = document.getElementById("toast");
+    const searchInput = document.getElementById("searchInput");
+
+    function renderSurahs(filter = "") {
+      container.innerHTML = "";
+      for (const name in surahs) {
+        if (!name.toLowerCase().includes(filter.toLowerCase())) continue;
+
+        const card = document.createElement("div");
+        card.textContent = name;
+        card.className = "glass text-purple-800 font-semibold px-4 py-3 rounded-2xl text-center shadow-md cursor-pointer hover:scale-105 hover:shadow-xl transition-all duration-300 truncate";
+        card.title = name;
+        card.onclick = () => {
+          navigator.clipboard.writeText(name).then(() => {
+            toast.classList.add("toast-show");
+            setTimeout(() => toast.classList.remove("toast-show"), 1500);
+          });
+        };
+        container.appendChild(card);
+      }
+    }
+
+    renderSurahs();
+    searchInput.addEventListener("input", (e) => {
+      renderSurahs(e.target.value);
+    });
+  </script>
+</body>
+</html>
